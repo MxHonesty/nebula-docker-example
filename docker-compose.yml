@@ -1,0 +1,104 @@
+version: '3.8'
+
+services:
+  lighthouse:
+    image: ubuntu:latest
+    container_name: lighthouse
+    volumes:
+      - type: bind
+        source: /home/honesty/nebula_demo/bin/nebula
+        target: /usr/local/bin/nebula
+      - type: bind
+        source: /home/honesty/nebula_demo/lighthouse-config/config-lighthouse.yaml
+        target: /etc/nebula/config.yaml
+      - type: bind
+        source: /home/honesty/nebula_demo/lighthouse-config/ca.crt
+        target: /etc/nebula/ca.crt
+      - type: bind
+        source: /home/honesty/nebula_demo/lighthouse-config/lighthouse1.crt
+        target: /etc/nebula/host.crt
+      - type: bind
+        source: /home/honesty/nebula_demo/lighthouse-config/lighthouse1.key
+        target: /etc/nebula/host.key
+    command: ["sh", "-c", "apt-get update && apt-get install -y iproute2 iputils-ping traceroute && chmod +x /usr/local/bin/nebula && /usr/local/bin/nebula -config /etc/nebula/config.yaml"] 
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      nebula-net:
+        ipv4_address: 172.18.0.2
+    ports:
+      - "4242:4242/udp"
+    restart: unless-stopped
+
+  server:
+    image: ubuntu:latest
+    container_name: server
+    volumes:
+      - type: bind
+        source: /home/honesty/nebula_demo/bin/nebula
+        target: /usr/local/bin/nebula
+      - type: bind
+        source: /home/honesty/nebula_demo/server-config/config.yaml
+        target: /etc/nebula/config.yaml
+      - type: bind
+        source: /home/honesty/nebula_demo/server-config/ca.crt
+        target: /etc/nebula/ca.crt
+      - type: bind
+        source: /home/honesty/nebula_demo/server-config/server.crt
+        target: /etc/nebula/host.crt
+      - type: bind
+        source: /home/honesty/nebula_demo/server-config/server.key
+        target: /etc/nebula/host.key 
+    command: ["sh", "-c", "apt-get update && apt-get install -y iproute2 iputils-ping traceroute && chmod +x /usr/local/bin/nebula && /usr/local/bin/nebula -config /etc/nebula/config.yaml"]
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      nebula-net:
+        ipv4_address: 172.18.0.3
+    restart: unless-stopped
+  
+  laptop:
+    image: ubuntu:latest
+    container_name: laptop
+    volumes:
+      - type: bind
+        source: /home/honesty/nebula_demo/bin/nebula
+        target: /usr/local/bin/nebula
+      - type: bind
+        source: /home/honesty/nebula_demo/laptop-config/config.yaml
+        target: /etc/nebula/config.yaml
+      - type: bind
+        source: /home/honesty/nebula_demo/laptop-config/ca.crt
+        target: /etc/nebula/ca.crt
+      - type: bind
+        source: /home/honesty/nebula_demo/laptop-config/laptop.crt
+        target: /etc/nebula/host.crt
+      - type: bind
+        source: /home/honesty/nebula_demo/laptop-config/laptop.key
+        target: /etc/nebula/host.key
+    command: ["sh", "-c", "apt-get update && apt-get install -y iproute2 iputils-ping traceroute && chmod +x /usr/local/bin/nebula && /usr/local/bin/nebula -config /etc/nebula/config.yaml"]
+    cap_add:
+      - NET_ADMIN
+    privileged: true
+    networks:
+      nebula-net:
+        ipv4_address: 172.18.0.4
+    restart: unless-stopped
+
+  outside:
+    image: ubuntu:latest
+    container_name: outside
+    command: ["sh", "-c", "apt-get update && apt-get install -y iproute2 iputils-ping traceroute && tail -f /dev/null"]
+    networks:
+      nebula-net:
+        ipv4_address: 172.18.0.5
+    restart: unless-stopped
+networks:
+  nebula-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.18.0.0/16
+
