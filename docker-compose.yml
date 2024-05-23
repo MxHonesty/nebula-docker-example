@@ -6,19 +6,19 @@ services:
     container_name: lighthouse
     volumes:
       - type: bind
-        source: /home/honesty/nebula_demo/bin/nebula
+        source: ${NEBULA_DIR}/bin/nebula
         target: /usr/local/bin/nebula
       - type: bind
-        source: /home/honesty/nebula_demo/lighthouse-config/config-lighthouse.yaml
+        source: ${NEBULA_DIR}/lighthouse-config/config-lighthouse.yaml
         target: /etc/nebula/config.yaml
       - type: bind
-        source: /home/honesty/nebula_demo/lighthouse-config/ca.crt
+        source: ${NEBULA_DIR}/lighthouse-config/ca.crt
         target: /etc/nebula/ca.crt
       - type: bind
-        source: /home/honesty/nebula_demo/lighthouse-config/lighthouse1.crt
+        source: ${NEBULA_DIR}/lighthouse-config/lighthouse1.crt
         target: /etc/nebula/host.crt
       - type: bind
-        source: /home/honesty/nebula_demo/lighthouse-config/lighthouse1.key
+        source: ${NEBULA_DIR}/lighthouse-config/lighthouse1.key
         target: /etc/nebula/host.key
     command: ["sh", "-c", "apt-get update && apt-get install -y iproute2 iputils-ping traceroute && chmod +x /usr/local/bin/nebula && /usr/local/bin/nebula -config /etc/nebula/config.yaml"] 
     cap_add:
@@ -36,19 +36,19 @@ services:
     container_name: server
     volumes:
       - type: bind
-        source: /home/honesty/nebula_demo/bin/nebula
+        source: ${NEBULA_DIR}/bin/nebula
         target: /usr/local/bin/nebula
       - type: bind
-        source: /home/honesty/nebula_demo/server-config/config.yaml
+        source: ${NEBULA_DIR}/server-config/config.yaml
         target: /etc/nebula/config.yaml
       - type: bind
-        source: /home/honesty/nebula_demo/server-config/ca.crt
+        source: ${NEBULA_DIR}/server-config/ca.crt
         target: /etc/nebula/ca.crt
       - type: bind
-        source: /home/honesty/nebula_demo/server-config/server.crt
+        source: ${NEBULA_DIR}/server-config/server.crt
         target: /etc/nebula/host.crt
       - type: bind
-        source: /home/honesty/nebula_demo/server-config/server.key
+        source: ${NEBULA_DIR}/server-config/server.key
         target: /etc/nebula/host.key 
     command: ["sh", "-c", "apt-get update && apt-get install -y iproute2 iputils-ping traceroute && chmod +x /usr/local/bin/nebula && /usr/local/bin/nebula -config /etc/nebula/config.yaml"]
     cap_add:
@@ -64,19 +64,19 @@ services:
     container_name: laptop
     volumes:
       - type: bind
-        source: /home/honesty/nebula_demo/bin/nebula
+        source: ${NEBULA_DIR}/bin/nebula
         target: /usr/local/bin/nebula
       - type: bind
-        source: /home/honesty/nebula_demo/laptop-config/config.yaml
+        source: ${NEBULA_DIR}/laptop-config/config.yaml
         target: /etc/nebula/config.yaml
       - type: bind
-        source: /home/honesty/nebula_demo/laptop-config/ca.crt
+        source: ${NEBULA_DIR}/laptop-config/ca.crt
         target: /etc/nebula/ca.crt
       - type: bind
-        source: /home/honesty/nebula_demo/laptop-config/laptop.crt
+        source: ${NEBULA_DIR}/laptop-config/laptop.crt
         target: /etc/nebula/host.crt
       - type: bind
-        source: /home/honesty/nebula_demo/laptop-config/laptop.key
+        source: ${NEBULA_DIR}/laptop-config/laptop.key
         target: /etc/nebula/host.key
     command: ["sh", "-c", "apt-get update && apt-get install -y iproute2 iputils-ping traceroute && chmod +x /usr/local/bin/nebula && /usr/local/bin/nebula -config /etc/nebula/config.yaml"]
     cap_add:
